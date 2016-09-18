@@ -1,0 +1,23 @@
+before_script:
+  - cnpm install
+stages:
+  - lint
+  - test
+
+job1:
+  stage: lint
+  script:
+    - npm run eslint
+  only:
+    - master
+  tags:
+    - node6.5
+
+job2:
+  stage: test
+  script:
+    - npm run test
+  only:
+    - master
+  tags:
+    - node6.5
