@@ -53,5 +53,8 @@ module.exports = yeoman.Base.extend({
       this.destinationPath('package.json'),
       Object.assign({}, { props: this.props }, { user })
     );
+  },
+  install: function () {
+    this.spawnCommand('cnpm', ['install']);
   }
 });

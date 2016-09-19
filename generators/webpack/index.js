@@ -10,7 +10,7 @@ module.exports = yeoman.Base.extend({
       i => this.fs.copy(this.templatePath(i), this.destinationPath(i))
     );
 
-    ['webpack.config.js'].forEach(i=>this.fs.copyTpl(
+    ['webpack.dev.config.js'].forEach(i=>this.fs.copyTpl(
       this.templatePath(`${i}.ejs`),
       this.destinationPath(i),
       this.options
