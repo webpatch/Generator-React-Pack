@@ -2,7 +2,7 @@
 
 ## Installation
 
-First, install [Yeoman](http://yeoman.io) and generator-dzbot using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
+First, install [Yeoman](http://yeoman.io) and generator-react-pack using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
 npm install -g yo
@@ -20,5 +20,5 @@ yo react-pack
 MIT © [webpatch]()
 
 
-[npm-image]: https://badge.fury.io/js/generator-dzbot.svg
-[npm-url]: https://npmjs.org/package/generator-dzbot
+[npm-image]: https://badge.fury.io/js/generator-react-pack.svg
+[npm-url]: https://npmjs.org/package/generator-react-pack
