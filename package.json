@@ -1,7 +1,7 @@
 {
-  "name": "generator-react-full",
+  "name": "generator-react-pack",
   "version": "0.1.0",
-  "description": "generator react full stack!",
+  "description": "A React full stack generator !",
   "homepage": "",
   "author": {
     "name": "webpatch",
@@ -13,8 +13,12 @@
   ],
   "main": "generators/index.js",
   "keywords": [
-    "",
-    "yeoman-generator"
+    "yeoman-generator",
+    "react",
+    "redux",
+    "webpack",
+    "babel",
+    "react-router"
   ],
   "dependencies": {
     "yeoman-generator": "^0.23.0",
@@ -41,7 +45,7 @@
       "mocha": true
     }
   },
-  "repository": "webpatch/React-Webpack-Full-Generator",
+  "repository": "webpatch/Generator-React-Pack",
   "scripts": {
     "prepublish": "gulp prepublish",
     "test": "gulp"
