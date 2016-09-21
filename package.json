@@ -1,7 +1,7 @@
 {
-  "name": "generator-dzbot",
-  "version": "0.0.0",
-  "description": "gen",
+  "name": "generator-react-full",
+  "version": "0.1.0",
+  "description": "generator react full stack!",
   "homepage": "",
   "author": {
     "name": "webpatch",
@@ -41,7 +41,7 @@
       "mocha": true
     }
   },
-  "repository": "webpatch/generator-dzbot",
+  "repository": "webpatch/React-Webpack-Full-Generator",
   "scripts": {
     "prepublish": "gulp prepublish",
     "test": "gulp"
