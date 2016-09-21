@@ -3,7 +3,7 @@ var yeoman = require('yeoman-generator');
 
 module.exports = yeoman.Base.extend({
   default: function () {
-    const compose = n => this.composeWith(`dzbot:${n}`, { options: this.props });
+    const compose = n => this.composeWith(`react-pack:${n}`, { options: this.props });
     ['webpack', 'react', 'eslint', 'babel', 'gulp'].forEach(i => compose(i));
     if (this.props.needTest) {
       compose('test');
