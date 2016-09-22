@@ -3,7 +3,9 @@
  */
 import React from 'react';
 
-export default class Main extends React.Component {
+import "./css/main.scss"; // 导入全局样式文件
+
+export default class App extends React.Component {
   render() {
     return (
       // 程序入口组件
