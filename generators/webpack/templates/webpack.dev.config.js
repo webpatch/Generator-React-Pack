@@ -5,14 +5,19 @@ var path = require('path');
 var precss = require('precss');
 var autoprefixer = require('autoprefixer');
 
+var host = 'localhost'; // IP 地址
+var port = 8000; // 端口号
+
 module.exports = {
+  port: port,
+  host: host,
   devtool: 'cheap-module-inline-source-map',
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
   entry: [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?http://0.0.0.0:8000',
+    'webpack-dev-server/client?http://0.0.0.0:' + port,
     'webpack/hot/only-dev-server',
     './src/index' // 定义程序入口文件
   ],
@@ -48,8 +53,10 @@ module.exports = {
       {
         test: /\.scss$/,
         include: path.resolve(__dirname, 'src/css/'),
-        loaders: ["style", "css?sourceMap","postcss", "sass?sourceMap"]
-      }
+        loaders: ["style", "css?sourceMap", "postcss", "sass?sourceMap"]
+      },
+      { test: /\.png$/, loader: "url-loader?limit=100000" },
+      { test: /\.(jpg|gif)$/, loader: "file-loader" }
     ]
   },
   postcss: function () {
