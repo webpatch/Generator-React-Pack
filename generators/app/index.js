@@ -10,7 +10,7 @@ module.exports = yeoman.Base.extend({
     }
   },
   prompting: function () {
-    this.log('欢迎使用React/Webpack生成器');
+    this.log('欢迎使用React/Webpack生成器v0.1.5');
     var prompts = [
       {
         type: 'input',

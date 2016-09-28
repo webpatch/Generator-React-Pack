@@ -55,8 +55,7 @@ module.exports = {
         include: path.resolve(__dirname, 'src/css/'),
         loaders: ["style", "css?sourceMap", "postcss", "sass?sourceMap"]
       },
-      { test: /\.png$/, loader: "url-loader?limit=100000" },
-      { test: /\.(jpg|gif)$/, loader: "file-loader" }
+      { test: /\.(jpg|gif|png|svg)$/, loader: "url-loader?limit=10000000" }
     ]
   },
   postcss: function () {
