@@ -1,71 +1,69 @@
 'use strict';
 var yeoman = require('yeoman-generator');
+var pack = require('./package.json');
 
 module.exports = yeoman.Base.extend({
   default: function () {
     const compose = n => this.composeWith(`react-pack:${n}`, { options: this.props });
-    ['webpack', 'react', 'lint', 'babel', 'gulp'].forEach(i => compose(i));
+    ['webpack', 'react', 'lint', 'babel'].forEach(i => compose(i));
     if (this.props.needTest) {
       compose('test');
     }
+
   },
   prompting: function () {
-    this.log('欢迎使用React/Webpack生成器v0.1.5');
+    this.log('Welcome to use React/Webpack generator v0.2.0');
     var prompts = [
       {
         type: 'input',
-        name: 'name',
-        message: '项目名',
+        name: 'projectName',
+        message: 'Project name',
         default: this.appname
       },
       {
         type: 'confirm',
         name: 'needIE8',
-        message: '需要兼容IE8吗?',
+        message: 'Is need IE8 compatibility?',
         default: true
       },
       {
         type: 'list',
         name: 'js',
-        message: '选择JS语言',
+        message: 'Choose language',
         choices: [
-          { name: 'JS + Flow', value: 'flow' },
+          { name: 'Raw JS', value: 'raw' },
           { name: 'Typescript', value: 'ts' },
-          { name: 'Raw JS', value: 'raw' }
+          { name: 'JS+Flow', value: 'flow' }
         ]
       },
       {
         type: 'list',
         name: 'css',
-        message: '选择CSS语言',
+        message: 'Choose CSS language',
         choices: [
           { name: 'SCSS', value: 'scss' },
-          { name: 'Stylus', value: 'styl' },
           { name: 'Raw CSS', value: 'raw' }
         ]
       },
       {
         type: 'confirm',
         name: 'needTest',
-        message: '需要添加测试吗?',
+        message: 'Is need unit testing ?',
         default: false
       }
     ];
 
     return this.prompt(prompts).then(props => {
       this.props = props;
-      console.log(this.props);
     });
   },
   writing: function () {
-    const user = { name: this.user.git.name() || '', email: this.user.git.email() || '' };
-    this.fs.copyTpl(
-      this.templatePath('package.json.ejs'),
-      this.destinationPath('package.json'),
-      Object.assign({}, { props: this.props }, { user })
-    );
+    const user = { userName: this.user.git.name() || '', email: this.user.git.email() || '' };
+    const d = Object.assign({}, this.props, user);
+    this.fs.write(this.destinationPath('package.json'), pack.getPackageJSON(d));
+    this.fs.copy(this.templatePath('.gitignore'), this.destinationPath('.gitignore'))
   },
   install: function () {
-    this.spawnCommand('cnpm', ['install']);
+    // this.spawnCommand('cnpm', ['install']);
   }
 });

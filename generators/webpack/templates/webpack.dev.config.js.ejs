@@ -11,7 +11,7 @@ var port = 8000; // 端口号
 module.exports = {
   port: port,
   host: host,
-  devtool: 'cheap-module-inline-source-map',
+  devtool: 'source-map',
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
@@ -27,35 +27,39 @@ module.exports = {
     filename: 'bundle.js' // 输出文件名
   },
   module: {
+    <%_ if(needIE8) { _%>
     postLoaders: [
       {
         test: /\.jsx?$/, // 通过正则匹配js,jsx文件
         loaders: ['es3ify'], //IE8兼容
       }
     ],
+    <%_ } _%>
     loaders: [
       {
         test: /\.jsx?$/, // 通过正则匹配js,jsx文件
         loaders: ['babel'], // 调用 babel进行es6->es5转换,并且启用react热替换
         exclude: /node_modules/, // 跳过 node_modules 目录
-        include: path.join(__dirname, 'src')
+        include: path.join(__dirname, 'src'),
       },
       {
         test: /\.scss$/,
         exclude: path.resolve(__dirname, 'src/css/'), // 跳过 node_modules 目录
         loaders: [
-          "style",
-          "css-loader?modules&sourceMap=true&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]",
-          "postcss",
-          "sass?sourceMap"
-        ]
+          'style',
+          'css-loader?modules&sourceMap=true&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+          'postcss',
+          'resolve-url',
+          'sass?sourceMap',
+        ],
       },
+      { test: /\.css/, loaders: ['style', 'css-loader', 'resolve-url'], },
       {
         test: /\.scss$/,
         include: path.resolve(__dirname, 'src/css/'),
-        loaders: ["style", "css?sourceMap", "postcss", "sass?sourceMap"]
+        loaders: ['style', 'css?sourceMap', 'postcss', 'resolve-url', 'sass?sourceMap'],
       },
-      { test: /\.(jpg|gif|png|svg)$/, loader: "url-loader?limit=10000000" }
+      { test: /\.(jpg|gif|png|svg|ico)$/, loader: 'url-loader?limit=10000000' },
     ]
   },
   postcss: function () {
