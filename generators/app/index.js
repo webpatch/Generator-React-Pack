@@ -64,6 +64,6 @@ module.exports = yeoman.Base.extend({
     this.fs.copy(this.templatePath('.gitignore'), this.destinationPath('.gitignore'))
   },
   install: function () {
-    // this.spawnCommand('cnpm', ['install']);
+    this.spawnCommand('cnpm', ['install']);
   }
 });
