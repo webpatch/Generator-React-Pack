@@ -19,7 +19,7 @@ module.exports = yeoman.Base.extend({
     }
   },
   prompting: function () {
-    this.log('Welcome to use React/Webpack generator v0.2.0');
+    this.log('Welcome to use React/Webpack generator v0.3.1');
     var prompts = [
       {
         type: 'input',
@@ -36,7 +36,7 @@ module.exports = yeoman.Base.extend({
       {
         type: 'list',
         name: 'js',
-        message: 'Choose language',
+        message: 'Choose javascript language',
         choices: [
           { name: 'Raw JS', value: 'raw' },
           { name: 'Typescript', value: 'ts' },
@@ -78,7 +78,7 @@ module.exports = yeoman.Base.extend({
     const user = { userName: this.user.git.name() || '', email: this.user.git.email() || '' };
     const d = Object.assign({}, this.props, user);
     this.fs.write(this.destinationPath('package.json'), pack.getPackageJSON(d));
-    this.fs.copy(this.templatePath('.gitignore'), this.destinationPath('.gitignore'))
+    // this.fs.copy(this.templatePath('.gitignore'), this.destinationPath('.gitignore'))
   },
   install: function () {
     this.spawnCommand('cnpm', ['install']);
