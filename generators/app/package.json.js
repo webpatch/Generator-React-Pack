@@ -26,13 +26,8 @@ const defaultPackage = (projectName, userName = '', email = '') => (
     "dependencies": {
       "babel-polyfill": "^6.13.0",
       "react": "^15.3.2",
-      "react-css-modules": "^3.7.10",
       "react-dom": "^15.3.2",
       "react-hot-loader": "^3.0.0-beta.6",
-      "react-router": "^3.0.0",
-      "react-router-redux": "^4.0.6",
-      "redux": "^3.6.0",
-      "redux-thunk": "^2.1.0",
     },
     "devDependencies": {
       "autoprefixer": "^6.3.6",
@@ -45,6 +40,7 @@ const defaultPackage = (projectName, userName = '', email = '') => (
       "babel-preset-stage-1": "^6.13.0",
       "webpack": "^1.13.2",
       "webpack-dev-server": "^1.15.1",
+      "resolve-url-loader": "^1.6.0",
       "file-loader": "^0.9.0",
       "url-loader": "^0.5.7",
       "style-loader": "^0.13.1",
@@ -90,20 +86,58 @@ const testPackage = {
 
 const ie8Package = {
   "dependencies": {
-    "babel-polyfill": "^6.13.0",
     "console-polyfill": "^0.2.3",
     "react": "^v0.14.8",
     "react-dom": "^v0.14.8",
-    "react-css-modules": "3.7.6",
-    "react-hot-loader": "^3.0.0-beta.3",
-    "react-router": "2.3.0",
-    "react-router-redux-ie8": "^0.0.3",
-    "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0"
+    "react-hot-loader": "^3.0.0-beta.6",
   },
   "devDependencies": {
     "es3ify-loader": "^0.2.0",
   }
+};
+
+const CSSModules = {
+  "dependencies": {
+    "react-css-modules": "^3.7.10",
+  },
+};
+
+const ie8CSSModules = {
+  "dependencies": {
+    "react-css-modules": "3.7.6",
+  },
+};
+
+const Redux = {
+  "dependencies": {
+    "redux": "^3.6.0",
+    "react-redux": "^4.4.5",
+    "redux-thunk": "^2.1.0",
+  }
+};
+
+const Router = {
+  "dependencies": {
+    "react-router": "^3.0.0",
+  }
+};
+
+const ie8Router = {
+  "dependencies": {
+    "react-router": "2.3.0",
+  },
+};
+
+const RouterRedux = {
+  "dependencies": {
+    "react-router-redux": "^4.0.6",
+  }
+};
+
+const ie8RouterRedux = {
+  "dependencies": {
+    "react-router-redux-ie8": "^0.0.3",
+  },
 };
 
 function merge(from, to) {
@@ -123,9 +157,36 @@ function merge(from, to) {
 module.exports = {
   getPackageJSON: function (props) {
     let d = defaultPackage(props.projectName, props.userName, props.email);
+
+    if (props.tools.includes('redux')) {
+      d = merge(Redux, d);
+    }
+
     if (props.needIE8) {
       d = merge(ie8Package, d);
+      if (props.tools.includes('cssmodule')) {
+        d = merge(ie8CSSModules, d);
+      }
+
+      if (props.tools.includes('router')) {
+        d = merge(ie8Router, d);
+        if (props.tools.includes('redux')) {
+          d = merge(ie8RouterRedux, d);
+        }
+      }
+    } else {
+      if (props.tools.includes('cssmodule')) {
+        d = merge(CSSModules, d);
+      }
+
+      if (props.tools.includes('router')) {
+        d = merge(Router, d);
+        if (props.tools.includes('redux')) {
+          d = merge(RouterRedux, d);
+        }
+      }
     }
+
     if (props.needTest) {
       d = merge(testPackage, d);
     }

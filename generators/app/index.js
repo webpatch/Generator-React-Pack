@@ -10,6 +10,13 @@ module.exports = yeoman.Base.extend({
       compose('test');
     }
 
+    if (this.props.tools.includes('redux')) {
+      compose('redux')
+    }
+
+    if (this.props.tools.includes('cssmodule')) {
+      compose('cssmodule')
+    }
   },
   prompting: function () {
     this.log('Welcome to use React/Webpack generator v0.2.0');
@@ -43,6 +50,16 @@ module.exports = yeoman.Base.extend({
         choices: [
           { name: 'SCSS', value: 'scss' },
           { name: 'Raw CSS', value: 'raw' }
+        ]
+      },
+      {
+        type: 'checkbox',
+        name: 'tools',
+        message: 'Choose other librarys',
+        choices: [
+          { name: 'Redux', value: 'redux' },
+          { name: 'React router', value: 'router' },
+          { name: 'CSS modules', value: 'cssmodule' },
         ]
       },
       {
