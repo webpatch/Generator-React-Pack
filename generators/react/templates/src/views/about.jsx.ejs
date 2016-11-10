@@ -1,0 +1,22 @@
+/**
+ * Created by dz on 16/11/2.
+ */
+
+import React, { Component, PropTypes } from 'react';
+<% if(isRouter) {%>import { Link } from 'react-router';<%}%>
+<% if(isCSSModule) {%>import cssModules from 'react-css-modules';
+import styles from './about.scss';
+
+@cssModules(styles, { allowMultiple: true, errorWhenNotFound: false })<%}%>
+export default class About extends Component {
+
+  render() {
+    return (
+      <div>
+        <div <% if(isCSSModule) {%>styleName="about"<%}%>>Hello from about!</div>
+          <% if(isRouter) {%><Link to='/'>back to index</Link><%}%>
+      </div>
+    );
+  }
+}
+

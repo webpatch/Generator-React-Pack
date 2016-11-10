@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import './css/main.scss'; // import global css style
 
 import { syncAction } from './model/action';
+import { Link } from 'react-router';
 
 class App extends Component {
   render() {
@@ -17,6 +18,14 @@ class App extends Component {
         <button onClick={() => dispatch(syncAction(`You click me! ${Math.random()}`))}>
           click me!
         </button>
+        <dl>
+          <dt>Pages</dt>
+          <dd><Link to='/about'>About</Link></dd>
+          <dd><Link to='/user'>User</Link></dd>
+        </dl>
+        <div>
+          {this.props.children}
+        </div>
       </div>
     );
   }

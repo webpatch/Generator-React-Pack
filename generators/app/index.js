@@ -1,6 +1,7 @@
 'use strict';
-var yeoman = require('yeoman-generator');
-var pack = require('./package.json');
+const yeoman = require('yeoman-generator');
+const pack = require('./package.json');
+const os = require('os');
 
 module.exports = yeoman.Base.extend({
   default: function () {
@@ -9,17 +10,9 @@ module.exports = yeoman.Base.extend({
     if (this.props.needTest) {
       compose('test');
     }
-
-    if (this.props.tools.includes('redux')) {
-      compose('redux')
-    }
-
-    if (this.props.tools.includes('cssmodule')) {
-      compose('cssmodule')
-    }
   },
   prompting: function () {
-    this.log('Welcome to use React/Webpack generator v0.3.1');
+    this.log('Welcome to use React/Webpack generator v0.4.3');
     var prompts = [
       {
         type: 'input',
@@ -78,9 +71,9 @@ module.exports = yeoman.Base.extend({
     const user = { userName: this.user.git.name() || '', email: this.user.git.email() || '' };
     const d = Object.assign({}, this.props, user);
     this.fs.write(this.destinationPath('package.json'), pack.getPackageJSON(d));
-    // this.fs.copy(this.templatePath('.gitignore'), this.destinationPath('.gitignore'))
+    this.fs.copy(this.templatePath('a.gitignore'), this.destinationPath('.gitignore'));
   },
   install: function () {
-    this.spawnCommand('cnpm', ['install']);
+    // this.spawnCommand('cnpm', ['install']);
   }
 });

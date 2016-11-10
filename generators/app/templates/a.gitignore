@@ -24,3 +24,4 @@ node_modules/
 dist/
 .DS_Store
 .sync
+.yarn.lock
