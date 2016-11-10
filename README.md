@@ -9,7 +9,7 @@
 * IE8+ support (use React v0.14.8)
 * Free combination
 
-### Includes
+## Packages include
 
 * base
 	* webpack
@@ -36,6 +36,7 @@
 * testing
 	* karma
 	* mocha
+	* chai
 
 
 ## Installation
@@ -53,6 +54,10 @@ Then generate your new project:
 yo react-pack
 ```
 
+## WIP
+
+* Typescript support
+* Flow support
 
 ## License
 
