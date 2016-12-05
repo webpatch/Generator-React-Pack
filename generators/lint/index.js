@@ -9,7 +9,7 @@ module.exports = yeoman.Base.extend({
     );
     this.fs.copy(
       this.templatePath('stylelint.config.js'),
-      this.destinationPath('stylelint.config.js')
+      this.destinationPath('dev/stylelint.config.js')
     );
   }
 });

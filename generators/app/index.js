@@ -6,13 +6,13 @@ const os = require('os');
 module.exports = yeoman.Base.extend({
   default: function () {
     const compose = n => this.composeWith(`react-pack:${n}`, { options: this.props });
-    ['webpack', 'react', 'lint', 'babel'].forEach(i => compose(i));
+    ['react', 'lint', 'babel'].forEach(i => compose(i));
     if (this.props.needTest) {
       compose('test');
     }
   },
   prompting: function () {
-    this.log('Welcome to use React/Webpack generator v0.4.6');
+    this.log('Welcome to use React/Webpack generator v0.5.0');
     var prompts = [
       {
         type: 'input',
@@ -68,10 +68,17 @@ module.exports = yeoman.Base.extend({
     });
   },
   writing: function () {
+    const copy = (a, b = a) => {
+      this.fs.copy(this.templatePath(a), this.destinationPath(b));
+    };
+
     const user = { userName: this.user.git.name() || '', email: this.user.git.email() || '' };
     const d = Object.assign({}, this.props, user);
     this.fs.write(this.destinationPath('package.json'), pack.getPackageJSON(d));
-    this.fs.copy(this.templatePath('a.gitignore'), this.destinationPath('.gitignore'));
+    copy('a.gitignore', '.gitignore');
+    copy('app.config.js');
+    copy('dev');
+    copy('static');
   },
   install: function () {
     // this.spawnCommand('cnpm', ['install']);

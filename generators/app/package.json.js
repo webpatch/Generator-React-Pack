@@ -19,9 +19,9 @@ const defaultPackage = (projectName, userName = '', email = '') => (
       "precheck": "npm run eslint",
       "eslint": "cross-env NODE_ENV=test eslint --cache --ext .jsx,.js src/",
       "csslint": "stylelint src/**/*.scss --syntax scss",
-      "flow": "flow; test $? -eq 0 -o $? -eq 2",
-      "start": "node server.js",
-      "dist": "webpack --config webpack.dist.config.js"
+      "start": "node ./dev/server.dev.js",
+      "dstart": "cross-env NODE_ENV=production node ./dev/server.dist.js",
+      "dist": "rimraf dist/ && cross-env NODE_ENV=production webpack --config ./dev/webpack.config.js && npm run dstart",
     },
     "dependencies": {
       "babel-polyfill": "^6.13.0",
@@ -58,7 +58,14 @@ const defaultPackage = (projectName, userName = '', email = '') => (
       "eslint-plugin-react": "^6.2.0",
       "stylelint": "^7.2.0",
       "stylelint-config-standard": "^13.0.0",
-      "cross-env": "^2.0.1"
+      "cross-env": "^2.0.1",
+      "pug": "^2.0.0-beta6",
+      "pug-loader": "^2.3.0",
+      "copy-webpack-plugin": "^4.0.1",
+      // dist 服务器
+      "http-rewrite-middleware": "^0.1.6",
+      "express": "^4.14.0",
+      "rimraf": "^2.5.4",
     },
     "repository": "",
     "license": "MIT"
@@ -67,7 +74,8 @@ const defaultPackage = (projectName, userName = '', email = '') => (
 
 const testPackage = {
   "scripts": {
-    "test": "cross-env NODE_ENV=test karma start",
+    "bage": "node ./dev/bage.js",
+    "test": "cross-env NODE_ENV=test karma start ./dev/karma.conf.js",
     "precheck": "npm run eslint && npm run test",
   },
   "devDependencies": {
@@ -85,6 +93,11 @@ const testPackage = {
 };
 
 const ie8Package = {
+  "scripts": {
+    "start": "cross-env IE8_ENV=1 node ./dev/server.dev.js",
+    "dstart": "cross-env IE8_ENV=1 NODE_ENV=production node ./dev/server.dist.js",
+    "dist": "rimraf dist/ && cross-env IE8_ENV=1 NODE_ENV=production webpack --config ./dev/webpack.config.js && npm run dstart",
+  },
   "dependencies": {
     "console-polyfill": "^0.2.3",
     "react": "^v0.14.8",

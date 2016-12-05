@@ -1,0 +1,180 @@
+// "use strict";
+
+const path = require('path');
+const webpack = require('webpack');
+
+// html
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+// static
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+// css
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const config = require('../app.config');
+
+const extractCSS = new ExtractTextPlugin('css/[name].css', { allChunks: true });
+const { port, host } = config.server;
+
+const isPrd = process.env.NODE_ENV === 'production';
+const isIE8Compatible = process.env.IE8_ENV === '1';
+
+function genHtmlPlugins(cfg) {
+  const templateParams = { template: path.resolve(__dirname, 'template/index.pug'), inject: false };
+  // 生成多页面
+  if (Array.isArray(cfg)) {
+    return cfg.map(i => new HtmlWebpackPlugin(Object.assign({}, templateParams, i)))
+  }
+  // 单页面
+  return [new HtmlWebpackPlugin(Object.assign({}, templateParams, cfg))];
+}
+
+// 生成开发模式的entry
+function genDevEntry(entrys) {
+  const e = (index) => [
+    'react-hot-loader/patch',
+    `webpack-dev-server/client?http://0.0.0.0:${port}`,
+    'webpack/hot/only-dev-server',
+    index
+  ];
+
+  // 单 entry 模式
+  if (typeof entrys === 'string') {
+    return e(entrys);
+  }
+
+  // 多 entry 模式
+  const out = {};
+  Object.keys(entrys).forEach(key => {
+    out[key] = e(entrys[key]);
+  });
+  return out;
+}
+
+const commonConfig = {
+  context: path.resolve(__dirname, '../'),
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+  },
+  output: {
+    path: path.resolve(__dirname, '../dist'), // 输出文件路径
+    publicPath: isPrd ? '' : `http://${host}:${port}/`,
+    filename: 'js/[name].entry.js', // 输出文件名
+  },
+  loaders: [
+    { test: /\.pug/, loader: 'pug-loader?pretty' },
+    {
+      test: /\.jsx?$/, // 通过正则匹配js,jsx文件
+      loaders: ['babel'], // 调用 babel进行es6->es5转换,并且启用react热替换
+      exclude: /node_modules/, // 跳过 node_modules 目录
+      include: path.resolve(__dirname, '../src'),
+    },
+    { test: /\.(jpg|gif|png|svg|ico)$/, loader: 'file?name=images/[name].[ext]' },
+  ],
+  postcss() {
+    return [precss, autoprefixer];
+  },
+  plugins: genHtmlPlugins(config.html),
+};
+
+const devConfig = {
+  devtool: 'source-map',
+  entry: genDevEntry(config.entry),
+  loaders: [
+    {
+      test: /\.scss$/,
+      exclude: path.resolve(__dirname, '../src/css/'), // 跳过 node_modules 目录
+      loaders: [
+        'style',
+        'css-loader?modules&sourceMap=true&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+        'postcss',
+        // 'resolve-url',
+        'sass?sourceMap',
+      ],
+    },
+    { test: /\.css/, loaders: ['style', 'css-loader', 'resolve-url'] },
+    {
+      test: /\.scss$/,
+      include: path.resolve(__dirname, '../src/css/'),
+      loaders: ['style', 'css', 'postcss', 'sass?sourceMap'],
+    },
+  ],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(), // 启用热替换插件
+  ],
+};
+
+const distConfig = {
+  entry: config.entry,
+  loaders: [
+    {
+      test: /\.scss$/,
+      exclude: path.resolve(__dirname, '../src/css'),
+      loader: extractCSS.extract([
+        'css?modules&&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+        'postcss',
+        'resolve-url',
+        'sass',
+      ], { publicPath: '../' }),
+    },
+    {
+      test: /\.scss$/,
+      include: path.resolve(__dirname, '../src/css'),
+      loader: extractCSS.extract(['css', 'postcss', 'resolve-url', 'sass'], { publicPath: '../' }),
+    },
+  ],
+  plugins: [
+    extractCSS,
+    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }),
+    new CopyWebpackPlugin([
+      { from: 'static/', to: 'static/' },
+    ].concat(config.copyFile)),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false },
+      mangle: {
+        except: ['exports', 'require']
+      }
+    }),
+  ],
+};
+
+function merger(from, to) {
+  const out = Object.assign({}, to);
+  // const configKey = isPrd ? 'dist' : 'dev';
+  // const hasCustomKey = configKey in config;
+  Object.keys(from).forEach((key) => {
+    // if (hasCustomKey && key in config[configKey]) {
+    if (key in config) {
+      out[key] = config[key];
+    } else if (key in out) {
+      if (Array.isArray(out[key])) { // 如果该是数组，则合并，比如 plugins / loaders
+        out[key] = from[key].concat(out[key]);
+      }
+    } else {
+      out[key] = from[key];
+    }
+  });
+  return out;
+}
+
+const postLoaders = isIE8Compatible ? [
+  {
+    test: /\.jsx?$/, // 通过正则匹配js,jsx文件
+    loaders: ['es3ify'], //IE8兼容
+  },
+] : null;
+
+function handlerModel(obj) {
+  const f = Object.assign({}, obj);
+  f.module = { postLoaders, loaders: f.loaders };
+  delete f.loaders;
+  return f;
+}
+
+const cfg = isPrd ? distConfig : devConfig;
+const configResult = handlerModel(merger(commonConfig, cfg));
+// console.log(JSON.stringify(configResult, null, '\t'));
+module.exports = configResult;

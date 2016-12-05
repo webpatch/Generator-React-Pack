@@ -21,7 +21,6 @@ module.exports = yeoman.Base.extend({
     const o = { isCSSModule, isRedux, isRouter };
 
     copy('src/css');
-    copy('index.html');
 
     if (isRedux) {
       copy('src/model/action.js');
