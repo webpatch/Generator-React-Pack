@@ -24,7 +24,7 @@ const isIE8Compatible = process.env.IE8_ENV === '1';
 
 function genHtmlPlugins(cfg) {
   const templateParams = { template: path.resolve(__dirname, 'template/index.pug'), inject: false };
-  <%if(isRouter){%>if (isProductionMode) templateParams.baseHref = `/`;<%}%>
+  <%if(isRouter){%>if (isProductionMode) templateParams.baseHref = `http://${host}:${port+1}/`;<%}%>
   // 生成多页面
   if (Array.isArray(cfg)) {
     return cfg.map(i => new HtmlWebpackPlugin(Object.assign({}, templateParams, i)))
