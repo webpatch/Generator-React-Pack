@@ -12,7 +12,7 @@ module.exports = yeoman.Base.extend({
     }
   },
   prompting: function () {
-    this.log('Welcome to use React/Webpack generator v0.5.1');
+    this.log('Welcome to use React/Webpack generator v0.5.3');
     var prompts = [
       {
         type: 'input',
