@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const webpackConfig = require('./webpack.config.js');
@@ -14,5 +15,5 @@ new WebpackDevServer(webpack(webpackConfig), {
   }
 }).listen(port, host, function (err, result) {
   if (err) return console.log(err);
-  console.log(`Listening at http://${host}:${port}`);
+  console.log(chalk.green(`Dev server listening on http://${host}:${port} ...`))
 });

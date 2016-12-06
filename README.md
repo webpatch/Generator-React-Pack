@@ -41,12 +41,14 @@ title|`string`|标题
 meta|`Array<Object>`|插入到head标签中的meta标签
 links|`Array<string|Object>`|插入到head标签中的link标签
 scripts |`Array<string|Object>`|插入到body标签尾部的script标签
+baseHref|`string`|插入到head标签顶部的base标签，主要用于多路由下的资源相对路径问题
 
 ```js
 
 html: [
 	{
 	  title: '视频直播',
+	  baseHref: 'http://localhost:8000/',
 	  meta:[
 	  	{ 'http-equiv':'X-UA-Compatible', content:'IE=EDGE' }
 	  ],
@@ -95,6 +97,7 @@ template: `./dev/template/index.pug`,
 ```js
 filename: `index.html`,
 ```
+
 
 ## Packages include
 

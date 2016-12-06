@@ -3,7 +3,13 @@
  */
 import { combineReducers } from 'redux';
 import * as ActionTypes from './action-types';
-<% if(isRouter) {%>import { routerReducer } from 'react-router-redux-ie8'<%}%>
+<%_if(isRouter) { -%>
+    <%_if(isIE8) {-%>
+import { routerReducer } from 'react-router-redux-ie8'
+    <%_}else{-%>
+import { routerReducer } from 'react-router-redux'
+    <%_}-%>
+<%_}-%>
 function appState(state = { data: 'Hello from redux!' }, action) {
   switch (action.type) {
     case ActionTypes.SYNC_ACTION:

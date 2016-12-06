@@ -19,11 +19,12 @@ const config = require('../app.config');
 const extractCSS = new ExtractTextPlugin('css/[name].css', { allChunks: true });
 const { port, host } = config.server;
 
-const isPrd = process.env.NODE_ENV === 'production';
+const isProductionMode = process.env.NODE_ENV === 'production';
 const isIE8Compatible = process.env.IE8_ENV === '1';
 
 function genHtmlPlugins(cfg) {
   const templateParams = { template: path.resolve(__dirname, 'template/index.pug'), inject: false };
+  <%if(isRouter){%>if (isProductionMode) templateParams.baseHref = `/`;<%}%>
   // 生成多页面
   if (Array.isArray(cfg)) {
     return cfg.map(i => new HtmlWebpackPlugin(Object.assign({}, templateParams, i)))
@@ -61,7 +62,7 @@ const commonConfig = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'), // 输出文件路径
-    publicPath: isPrd ? '' : `http://${host}:${port}/`,
+    publicPath: isProductionMode ? '' : `http://${host}:${port}/`, // 防止css-loader不能正常加载图片
     filename: 'js/[name].entry.js', // 输出文件名
   },
   loaders: [
@@ -134,9 +135,7 @@ const distConfig = {
     ].concat(config.copyFile)),
     new webpack.optimize.UglifyJsPlugin({
       compress: { warnings: false },
-      mangle: {
-        except: ['exports', 'require']
-      }
+      comments: false,
     }),
   ],
 };
@@ -174,7 +173,7 @@ function handlerModel(obj) {
   return f;
 }
 
-const cfg = isPrd ? distConfig : devConfig;
+const cfg = isProductionMode ? distConfig : devConfig;
 const configResult = handlerModel(merger(commonConfig, cfg));
 // console.log(JSON.stringify(configResult, null, '\t'));
 module.exports = configResult;

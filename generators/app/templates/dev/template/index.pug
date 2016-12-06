@@ -2,10 +2,11 @@
 - links = htmlWebpackPlugin.options.links || []
 - meta = htmlWebpackPlugin.options.meta || []
 doctype html
-html(xmlns:gs='http://www.gensee.com/ec')
+html
     head
         if htmlWebpackPlugin.options.baseHref
             base(href=htmlWebpackPlugin.options.baseHref)
+            // 如非部署在根目录则href需改为绝对地址，比如:http://www.sample.com/spzb
         meta(http-equiv='X-UA-Compatible',content='IE=EDGE')
         meta(charset='UTF-8')
         each mt in meta
@@ -19,7 +20,7 @@ html(xmlns:gs='http://www.gensee.com/ec')
             link(rel= 'stylesheet',href=css)
         title= htmlWebpackPlugin.options.title
 
-    body(class='dark-theme')
+    body
         #root
         each sc in scripts
             - var sItem = sc

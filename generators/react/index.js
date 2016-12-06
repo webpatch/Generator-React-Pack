@@ -10,15 +10,15 @@ module.exports = yeoman.Base.extend({
     const copyTpl = (o, a, b = a) => {
       this.fs.copyTpl(this.templatePath(a), this.destinationPath(b), o);
     };
-
-    console.log(this.options);
+    // console.log(this.options);
 
     const tools = this.options.tools;
+    const isIE8 = this.options.needIE8;
     const isRedux = tools.includes('redux');
     const isCSSModule = tools.includes('cssmodule');
     const isRouter = tools.includes('router');
 
-    const o = { isCSSModule, isRedux, isRouter };
+    const o = { isCSSModule, isRedux, isRouter, isIE8 };
 
     copy('src/css');
 
@@ -38,7 +38,7 @@ module.exports = yeoman.Base.extend({
 
     if (isRouter && isRedux) {
       copy('src/app-router-redux.jsx', 'src/app.jsx');
-      copy('src/wrap-router-redux.jsx', 'src/wrap.jsx');
+      copyTpl(o,'src/wrap-router-redux.jsx.ejs', 'src/wrap.jsx');
     } else if (isRouter) {
       copy('src/app-router.jsx', 'src/app.jsx');
       copy('src/wrap-router.jsx', 'src/wrap.jsx');

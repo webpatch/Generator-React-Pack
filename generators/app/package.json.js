@@ -38,7 +38,7 @@ const defaultPackage = (projectName, userName = '', email = '') => (
       "babel-preset-es2015": "^6.14.0",
       "babel-preset-react": "^6.11.1",
       "babel-preset-stage-1": "^6.13.0",
-      "webpack": "^1.13.2",
+      "webpack": "1.13.2",
       "webpack-dev-server": "^1.15.1",
       "resolve-url-loader": "^1.6.0",
       "file-loader": "^0.9.0",
@@ -66,6 +66,7 @@ const defaultPackage = (projectName, userName = '', email = '') => (
       "http-rewrite-middleware": "^0.1.6",
       "express": "^4.14.0",
       "rimraf": "^2.5.4",
+      "chalk": "^1.1.3",
     },
     "repository": "",
     "license": "MIT"

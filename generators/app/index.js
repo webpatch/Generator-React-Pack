@@ -12,7 +12,7 @@ module.exports = yeoman.Base.extend({
     }
   },
   prompting: function () {
-    this.log('Welcome to use React/Webpack generator v0.5.0');
+    this.log('Welcome to use React/Webpack generator v0.5.1');
     var prompts = [
       {
         type: 'input',
@@ -68,15 +68,21 @@ module.exports = yeoman.Base.extend({
     });
   },
   writing: function () {
-    const copy = (a, b = a) => {
-      this.fs.copy(this.templatePath(a), this.destinationPath(b));
-    };
+    const copy = (a, b = a) => this.fs.copy(this.templatePath(a), this.destinationPath(b));
+    const copyTpl = (o, a, b = a) => this.fs.copyTpl(this.templatePath(a), this.destinationPath(b), o);
+
+    const tools = this.props.tools;
+    const isRedux = tools.includes('redux');
+    const isCSSModule = tools.includes('cssmodule');
+    const isRouter = tools.includes('router');
+    const o = { isCSSModule, isRedux, isRouter };
 
     const user = { userName: this.user.git.name() || '', email: this.user.git.email() || '' };
     const d = Object.assign({}, this.props, user);
     this.fs.write(this.destinationPath('package.json'), pack.getPackageJSON(d));
     copy('a.gitignore', '.gitignore');
     copy('app.config.js');
+    copyTpl(o, 'webpack.config.js.ejs', 'dev/webpack.config.js');
     copy('dev');
     copy('static');
   },

@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   server: {
     host: 'localhost', // IP 地址
     port: 8000, // 端口号
@@ -22,3 +22,5 @@ module.exports = {
   ],
   entry: './src/index',
 };
+
+module.exports = config;

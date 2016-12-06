@@ -1,6 +1,7 @@
 /**
  * Created by dz on 16/11/28.
  */
+const chalk = require('chalk');
 const express = require('express');
 const rewriteModule = require('http-rewrite-middleware');
 const app = express();
@@ -19,5 +20,5 @@ app.use(rewriteModule.getMiddleware([
 app.use(express.static(webpackConfig.output.path));
 
 app.listen(port, host, function () {
-  console.log(`Static app listening on ${host}:${port}`)
+  console.log(chalk.green(`Dist server listening on http://${host}:${port} ...`))
 });
