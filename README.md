@@ -1,5 +1,7 @@
 # generator-react-pack [![NPM version][npm-image]][npm-url] 
 
+> ## Deprecated!! Use [react-pack-cli](https://github.com/webpatch/react-pack-cli) instead.
+
 ## Features
 
 * React full packs
